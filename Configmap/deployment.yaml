@@ -20,6 +20,11 @@ spec:
           env:
             - name: name
               value: Mohamed Atef
+            - name: age
+              valueFrom:
+                configMapKeyRef:
+                  name: myage
+                  key: my-nice-age 
 
 
 
