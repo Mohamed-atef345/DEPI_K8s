@@ -25,7 +25,17 @@ spec:
                 configMapKeyRef:
                   name: myage
                   key: my-nice-age 
-
-
+            - name: username
+              valueFrom:
+                configMapKeyRef:
+                  name: credentials
+                  key: username
+            - name: password
+              valueFrom:
+                configMapKeyRef:
+                  name: credentials
+                  key: password
+            
+            
 
 

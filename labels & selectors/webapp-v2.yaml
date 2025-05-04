@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-v2
+  labels:
+    deployment: webapp-v2
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: webapp-v2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 10
+  revisionHistoryLimit: 5
+  progressDeadlineSeconds: 600 
+  template:
+    metadata:
+      labels:
+        app: webapp-v2
+    spec:
+      containers:
+        - name: nginx-webapp
+          image: ubuntu
+          env:
+            - name: ENVIRONMENT
+              value: production
+          command: ["/bin/bash","-c","sleep infinity"]
+          ports:
+            - containerPort: 80
+          resources: 
+            requests:
+              cpu: "100m"
+              memory: "150Mi"
+            limits:
+              cpu: "200m"
+              memory: "300Mi"
+      nodeName:
+        kind-worker

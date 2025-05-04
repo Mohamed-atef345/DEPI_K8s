@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-v3
+  labels:
+    deployment: webapp-v3
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: webapp-v3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 10
+  revisionHistoryLimit: 5
+  progressDeadlineSeconds: 600 
+  template:
+    metadata:
+      labels:
+        app: webapp-v3
+    spec:
+      nodeName:
+        kind-control-plane
+      containers:
+        - name: nginx-webapp
+          image: ubuntu
+          env:
+            - name: ENVIRONMENT
+              value: production
+          command: ["/bin/bash","-c","sleep infinity"]
+          ports:
+            - containerPort: 80
+          resources: 
+            requests:
+              cpu: "100m"
+              memory: "150Mi"
+            limits:
+              cpu: "200m"
+              memory: "300Mi"
+      tolerations:
+        - key: "node-role.kubernetes.io/control-plane"
+          operator: "Exists"
+          effect: "NoSchedule"
+
